@@ -13,6 +13,7 @@
             parent::__construct($registry, Serie::class);
         }
 
+        // Méthode : query builder
         public function findSeriesCustom(): array
         {
             return $this->createQueryBuilder('s')
