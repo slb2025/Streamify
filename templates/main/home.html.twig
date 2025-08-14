@@ -11,7 +11,7 @@
             <option value="">Tous</option>
             <option value="Drama">Drama</option>
             <option value="Comedy">Comedy</option>
-            <option option="Science-Fiction">Science-Fiction</option>
+            <option value="Science-Fiction">Science-Fiction</option>
         </select>
 
         <label for="status">Statut :</label>
@@ -21,6 +21,19 @@
             <option value="Ended">Terminée</option>
         </select>
 
-        <button type="submit">Afficher le catalogue</button>
+        <label for="sort-by">Trier par :</label>
+        <select name="sort-by" id="sort-by">
+            <option value="">---</option>
+            <option value="vote_desc">Vote (Décroissant)</option>
+            <option value="vote_asc">Vote (Croissant)</option>
+            <option value="popularity_desc">Popularité (Décroissant)</option>
+            <option value="popularity_asc">Popularité (Croissant)</option>
+            <option value="firstAirDate_desc">Date de sortie (Décroissant)</option>
+            <option value="firstAirDate_asc">Date de sortie (Croissant)</option>
+            <option value="lastAirDate_desc">Dernière saison (Décroissant)</option>
+            <option value="lastAirDate_asc">Dernière saison (Croissant)</option>
+        </select>
+
+        <button type="submit">Afficher le catalogue filtré</button>
     </form>
 {% endblock %}

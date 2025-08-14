@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Serie;
 use App\Repository\SerieRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -15,14 +14,12 @@ final class SerieController extends AbstractController
     #[Route('/list/{page}', name: '_list', requirements: ['page' => '\d+'], defaults: ['page' => 1], methods: ['GET'])]
     public function list(SerieRepository $serieRepository, int $page, ParameterBagInterface $parameters, Request $request): Response
     {
-        //$series=$serieRepository->findAll();
-
-        $nbParPage =$parameters->get('serie')['nb_max'];
-        $offset = ($page -1) * $nbParPage;
+        $nbParPage = $parameters->get('serie')['nb_max'];
+        $offset = ($page - 1) * $nbParPage;
 
         $criterias = [];
-            $genre = $request->query->get('genre');
-            $status = $request->query->get('status');
+        $genre = $request->query->get('genre');
+        $status = $request->query->get('status');
 
         if ($genre) {
             $criterias['genres'] = $genre;
@@ -32,21 +29,32 @@ final class SerieController extends AbstractController
             $criterias['status'] = $status;
         }
 
+        $sortCriteria = [];
+        $sortBy = $request->query->get('sort-by');
+        if ($sortBy) {
+            $parts = explode('_', $sortBy);
+            $sortCriteria[$parts[0]] = strtoupper($parts[1]);
+        } else {
+            // Tri par défaut si rien n'est sélectionné
+            $sortCriteria['popularity'] = 'DESC';
+        }
+
         $series = $serieRepository->findBy(
             $criterias,
-            ['popularity' => 'DESC'],
+            $sortCriteria, // Utilisez le critère de tri dynamique
             $nbParPage,
             $offset
         );
 
         $total = $serieRepository->count($criterias);
-        $totalPages = ceil($total/$nbParPage);
+        $totalPages = ceil($total / $nbParPage);
 
         return $this->render('series/list.html.twig', [
             'series' => $series,
             'page' => $page,
             'total_pages' => $totalPages,
-            'current_criterias' => $criterias,
+            // Passez les critères actuels pour la pagination
+            'current_criterias' => array_merge($criterias, ['sort-by' => $sortBy]),
         ]);
     }
 
