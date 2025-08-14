@@ -1,3 +1,56 @@
 body {
-    background-color: skyblue;
+    background-color: #FFFFFF; /* Fond blanc uni */
+    color: #333333; /* Couleur du texte plus sombre pour la lisibilité */
+    font-family: 'Roboto', sans-serif;
+    padding: 10px;
+}
+
+/* Le reste de votre CSS reste le même, mais assurez-vous
+   que les autres éléments s'affichent correctement
+   sur un fond clair. */
+nav ul {
+    display: flex;
+    flex-direction: row;
+    list-style: none;
+    gap: 2em;
+}
+
+nav li a {
+    text-decoration: none;
+    color: inherit;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse; /* Retire les espaces entre les bordures de cellules */
+    margin-top: 20px;
+    background-color: #f9f9f9; /* Un léger fond gris pour le tableau */
+    border: 1px solid #ddd;
+    border-radius: 8px; /* Bords arrondis pour un look plus moderne */
+    overflow: hidden; /* Assure que les bords arrondis s'appliquent bien */
+}
+
+th, td {
+    padding: 12px 15px; /* Espacement intérieur */
+    text-align: left; /* Alignement du texte à gauche */
+    border-bottom: 1px solid #ddd; /* Ligne de séparation entre les rangées */
+}
+
+thead {
+    background-color: #eeeeee; /* Fond gris plus foncé pour l'en-tête */
+    color: #333333;
+}
+
+tbody tr:hover {
+    background-color: #e2e2e2; /* Changement de couleur au survol des lignes */
+    cursor: pointer;
+}
+
+a {
+    color: #007bff; /* Couleur des liens */
+    text-decoration: none; /* Retire le soulignement des liens */
+}
+
+a:hover {
+    text-decoration: underline; /* Ajoute un soulignement au survol */
 }

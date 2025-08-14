@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <a href="#" onclick="history.back()">Retour au catalogue</a>
+
+    <h2>Serie {{ serie.name }}</h2>
+
+    <span>Genre: {{ serie.genres }}</span><br>
+    <span>Statut: {{ serie.status }}</span><br>
+    <span>{{ serie.firstAirDate|date('d/m/Y') }}</span><br>
+
+    <p>{{ serie.overview }}</p>
+
+{% endblock %}

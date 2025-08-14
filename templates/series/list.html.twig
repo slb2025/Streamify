@@ -1,0 +1,48 @@
+{% extends '/base.html.twig' %}
+
+{% block title %} {{ parent() }} - Catalogue de séries {% endblock %}
+
+{% block body %}
+    <h2>Catalogue de séries</h2>
+
+    <section>
+        {% if page > 1 %}
+            <a href="{{ path('_list', {'page' : page - 1}) }}">Page précédente</a>
+        {% endif %}
+        {% if page < total_pages %}
+            <a href="{{ path('_list', {'page' : page + 1}) }}">Page suivante</a>
+        {% endif %}
+    </section>
+
+<table>
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nom</th>
+            <th>Statut</th>
+            <th>Genre</th>
+            <th>Vote</th>
+            <th>Score de popularité</th>
+            <th>Date de sortie</th>
+            <th>Dernière saison</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for serie in series %}
+            <tr>
+                <td>{{ serie.id }}</td>
+                <td>{{ serie.name }}</td>
+                <td>{{ serie.status }}</td>
+                <td>{{ serie.genres }}</td>
+                <td>{{ serie.vote }}</td>
+                <td>{{ serie.popularity }}</td>
+                <td>{{ serie.firstAirDate|date('d/m/Y') }}</td>
+                <td>{{ serie.lastAirDate ? serie.lastAirDate|date('d/m/Y') : '' }}</td>
+                <td><a href="{{ path('_detail', {id: serie.id}) }}">Voir</a> </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
