@@ -28,43 +28,42 @@
                 ->getResult();
         }
 
-        // Autre méthode :
+        // Autre méthode : dql
         public function findSeriesWithDQL(float $popularity, float $vote): array
         {
-            $dql =  "SELECT s FROM App\Entity\Serie s 
+            $dql = <<<SQL
+                    SELECT s FROM App\Entity\Serie s 
                     WHERE (s.popularity > :popularity or s.firstAirDate > :date) AND s.vote > :vote 
-                    ORDER BY s.popularity DESC AND s.firstAirDate DESC";
+                    ORDER BY s.popularity DESC, s.firstAirDate DESC
+                    SQL;
 
             return $this->getEntityManager()->createQuery($dql)
                 ->setFirstResult(0)
                 ->setMaxResults(10)
                 ->setParameter('popularity', $popularity)
                 ->setParameter('vote', $vote)
-                ->setParameter('date', new \DateTime('- 5 years'));
+                ->setParameter('date', new \DateTime('- 5 years'))
+                ->getResult();
+        }
+
+        // Autre méthode : raw SQL
+        public function getSeriesWithSQL(float $popularity, float $vote): array // Ajout des paramètres manquants
+        {
+            $sql = <<<SQL
+            SELECT * FROM serie s 
+            WHERE (s.popularity > :popularity or s.firstAirDate > :date)
+            AND s.vote > :vote
+            ORDER BY s.popularity DESC, s.firstAirDate DESC
+            LIMIT 10 OFFSET 0
+        SQL;
+
+            $conn = $this->getEntityManager()->getConnection();
+            return $conn->prepare($sql)
+                ->executeQuery([
+                    'popularity' => $popularity,
+                    'date' => (new \DateTime('- 5 years'))->format('Y-m-d'), // Correction: formater la date pour SQL
+                    'vote' => $vote,
+                ])
+                ->fetchAllAssociative();
         }
     }
-
-        //    /**
-        //     * @return Serie[] Returns an array of Serie objects
-        //     */
-        //    public function findByExampleField($value): array
-        //    {
-        //        return $this->createQueryBuilder('s')
-        //            ->andWhere('s.exampleField = :val')
-        //            ->setParameter('val', $value)
-        //            ->orderBy('s.id', 'ASC')
-        //            ->setMaxResults(10)
-        //            ->getQuery()
-        //            ->getResult()
-        //        ;
-        //    }
-
-        //    public function findOneBySomeField($value): ?Serie
-        //    {
-        //        return $this->createQueryBuilder('s')
-        //            ->andWhere('s.exampleField = :val')
-        //            ->setParameter('val', $value)
-        //            ->getQuery()
-        //            ->getOneOrNullResult()
-        //        ;
-        //    }

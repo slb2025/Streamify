@@ -3,6 +3,24 @@
 {% block title %} {{ parent() }} - Accueil {% endblock %}
 
 {% block body %}
-    <h2>Home</h2>
-{% endblock %}
+    <h2>Accueil</h2>
 
+    <form action="{{ path('_list') }}" method="get">
+        <label for="genre">Genre :</label>
+        <select name="genre" id="genre">
+            <option value="">Tous</option>
+            <option value="Drama">Drama</option>
+            <option value="Comedy">Comedy</option>
+            <option option="Science-Fiction">Science-Fiction</option>
+        </select>
+
+        <label for="status">Statut :</label>
+        <select name="status" id="status">
+            <option value="">Tous</option>
+            <option value="Returning">En cours</option>
+            <option value="Ended">Terminée</option>
+        </select>
+
+        <button type="submit">Afficher le catalogue</button>
+    </form>
+{% endblock %}

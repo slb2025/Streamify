@@ -7,10 +7,10 @@
 
     <section>
         {% if page > 1 %}
-            <a href="{{ path('_list', {'page' : page - 1}) }}">Page précédente</a>
+            <a href="{{ path('_list', {'page' : page - 1}|merge(current_criterias)) }}">Page précédente</a>
         {% endif %}
         {% if page < total_pages %}
-            <a href="{{ path('_list', {'page' : page + 1}) }}">Page suivante</a>
+            <a href="{{ path('_list', {'page' : page + 1}|merge(current_criterias)) }}">Page suivante</a>
         {% endif %}
     </section>
 

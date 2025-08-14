@@ -6,26 +6,35 @@ use App\Entity\Serie;
 use App\Repository\SerieRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class SerieController extends AbstractController
 {
     #[Route('/list/{page}', name: '_list', requirements: ['page' => '\d+'], defaults: ['page' => 1], methods: ['GET'])]
-    public function list(SerieRepository $serieRepository, int $page, ParameterBagInterface $parameters): Response
+    public function list(SerieRepository $serieRepository, int $page, ParameterBagInterface $parameters, Request $request): Response
     {
         //$series=$serieRepository->findAll();
 
         $nbParPage =$parameters->get('serie')['nb_max'];
         $offset = ($page -1) * $nbParPage;
-        $criterias = [
-            'status'=>'Returning',
-            'genres'=> 'Drama',
-        ];
+
+        $criterias = [];
+            $genre = $request->query->get('genre');
+            $status = $request->query->get('status');
+
+        if ($genre) {
+            $criterias['genres'] = $genre;
+        }
+
+        if ($status) {
+            $criterias['status'] = $status;
+        }
 
         $series = $serieRepository->findBy(
             $criterias,
-            ['popularity'=>'DESC'],
+            ['popularity' => 'DESC'],
             $nbParPage,
             $offset
         );
@@ -37,6 +46,7 @@ final class SerieController extends AbstractController
             'series' => $series,
             'page' => $page,
             'total_pages' => $totalPages,
+            'current_criterias' => $criterias,
         ]);
     }
 
