@@ -14,35 +14,45 @@
         {% endif %}
     </section>
 
-<table>
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th>Nom</th>
-            <th>Statut</th>
-            <th>Genre</th>
-            <th>Vote</th>
-            <th>Score de popularité</th>
-            <th>Date de sortie</th>
-            <th>Dernière saison</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for serie in series %}
-            <tr>
-                <td>{{ serie.id }}</td>
-                <td>{{ serie.name }}</td>
-                <td>{{ serie.status }}</td>
-                <td>{{ serie.genres }}</td>
-                <td>{{ serie.vote }}</td>
-                <td>{{ serie.popularity }}</td>
-                <td>{{ serie.firstAirDate|date('d/m/Y') }}</td>
-                <td>{{ serie.lastAirDate ? serie.lastAirDate|date('d/m/Y') : '' }}</td>
-                <td><a href="{{ path('_detail', {id: serie.id}) }}">Voir</a> </td>
-            </tr>
-        {% endfor %}
-    </tbody>
+{#<table>#}
+{#    <thead>#}
+{#        <tr>#}
+{#            <th>Id</th>#}
+{#            <th>Nom</th>#}
+{#            <th>Statut</th>#}
+{#            <th>Genre</th>#}
+{#            <th>Vote</th>#}
+{#            <th>Score de popularité</th>#}
+{#            <th>Date de sortie</th>#}
+{#            <th>Dernière saison</th>#}
+{#            <th></th>#}
+{#        </tr>#}
+{#    </thead>#}
+{#    <tbody>#}
+{#        {% for serie in series %}#}
+{#            <tr>#}
+{#                <td>{{ serie.id }}</td>#}
+{#                <td>{{ serie.name }}</td>#}
+{#                <td>{{ serie.status }}</td>#}
+{#                <td>{{ serie.genres }}</td>#}
+{#                <td>{{ serie.vote }}</td>#}
+{#                <td>{{ serie.popularity }}</td>#}
+{#                <td>{{ serie.firstAirDate|date('d/m/Y') }}</td>#}
+{#                <td>{{ serie.lastAirDate ? serie.lastAirDate|date('d/m/Y') : '' }}</td>#}
+{#                <td><a href="{{ path('_detail', {id: serie.id}) }}">Voir</a> </td>#}
+{#            </tr>#}
+{#        {% endfor %}#}
+{#    </tbody>#}
 </table>
+
+<section class="series-list">
+    {% for serie in series %}
+        <a href="{{ path('_detail', {id : serie.id}) }}">
+            <img src="{{ asset('uploads/posters/series/' ~ serie.poster) }}" width="250px" alt="{{ 'Poster de ' ~serie.name }}" loading="lazy">
+        </a>
+    {% else %}
+        <p>Pas de série</p>
+    {% endfor %}
+</section>
 
 {% endblock %}

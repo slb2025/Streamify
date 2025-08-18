@@ -7,6 +7,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SerieRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Serie
 {
     #[ORM\Id]
@@ -195,9 +196,12 @@ class Serie
         return $this->dateCreated;
     }
 
-    public function setDateCreated(\DateTime $dateCreated): static
+    // Quand persistée par Doctrine, cette méthode doit se déclencher automatiquement
+    // Donc ajout de PrePersist
+    #[ORM\PrePersist]
+    public function setDateCreated(): static
     {
-        $this->dateCreated = $dateCreated;
+        $this->dateCreated = new \DateTime();
 
         return $this;
     }
@@ -207,9 +211,10 @@ class Serie
         return $this->dateModified;
     }
 
-    public function setDateModified(?\DateTime $dateModified): static
+    #[ORM\PreUpdate]
+    public function setDateModified(): static
     {
-        $this->dateModified = $dateModified;
+        $this->dateModified = new \DateTime();
 
         return $this;
     }

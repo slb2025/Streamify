@@ -2,7 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Serie;
+use App\Form\SerieType;
 use App\Repository\SerieRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -70,16 +73,55 @@ final class SerieController extends AbstractController
         ]);
     }
 
-    #[Route('/list/detail/{id}', name: '_detail')]
-    public function detail(int $id, SerieRepository $serieRepository): Response
+    #[Route('/list/detail/{id}', name: '_detail', requirements: ['id' => '\d+'])]
+    public function detail(Serie $serie): Response
     {
-        $serie = $serieRepository->find($id);
-
-        if (!$serie) {
-            throw $this->createNotFoundException('Pas de série pour cet id');
-        }
         return $this->render('series/detail.html.twig', [
             'serie' => $serie
         ]);
     }
+
+    #[Route('/list/create', name: '_create')]
+    public function create(Request $request, EntityManagerInterface $em): Response
+    {
+        $serie = new Serie();
+        $form = $this->createForm(SerieType::class, $serie);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+
+            $em->persist($serie);
+            $em->flush();
+
+            $this->addFlash('success', "Une série a été enregistrée");
+
+            return $this->redirectToRoute('_detail', ['id' => $serie->getId()]);
+        }
+
+        return $this->render('series/edit.html.twig', [
+            'serie_form' => $form,
+        ]);
+    }
+
+    #[Route('/list/update{id}', name: '_update', requirements: ['id' => '\d+'])]
+    public function update(Serie $serie, Request $request, EntityManagerInterface $em): Response
+    {
+        $form = $this->createForm(SerieType::class, $serie);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            $em->flush();
+
+            $this->addFlash('success', "Une série a été mise à jour");
+
+            return $this->redirectToRoute('_detail', ['id' => $serie->getId()]);
+        }
+
+        return $this->render('series/edit.html.twig', [
+            'serie_form' => $form,
+        ]);
+    }
 }
+

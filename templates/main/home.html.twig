@@ -5,35 +5,13 @@
 {% block body %}
     <h2>Accueil</h2>
 
-    <form action="{{ path('_list') }}" method="get">
-        <label for="genre">Genre :</label>
-        <select name="genre" id="genre">
-            <option value="">Tous</option>
-            <option value="Drama">Drama</option>
-            <option value="Comedy">Comedy</option>
-            <option value="Science-Fiction">Science-Fiction</option>
-        </select>
+    {{ form_start(filter_form, {'action': path('_list'), 'method': 'get'}) }}
+    <div class="filter-container">
+        {{ form_row(filter_form.genre) }}
+        {{ form_row(filter_form.status) }}
+        {{ form_row(filter_form.sortBy) }}
+        {{ form_row(filter_form.submit) }}
+    </div>
+    {{ form_end(filter_form) }}
 
-        <label for="status">Statut :</label>
-        <select name="status" id="status">
-            <option value="">Tous</option>
-            <option value="Returning">En cours</option>
-            <option value="Ended">Terminée</option>
-        </select>
-
-        <label for="sort-by">Trier par :</label>
-        <select name="sort-by" id="sort-by">
-            <option value="">---</option>
-            <option value="vote_desc">Vote (Décroissant)</option>
-            <option value="vote_asc">Vote (Croissant)</option>
-            <option value="popularity_desc">Popularité (Décroissant)</option>
-            <option value="popularity_asc">Popularité (Croissant)</option>
-            <option value="firstAirDate_desc">Date de sortie (Décroissant)</option>
-            <option value="firstAirDate_asc">Date de sortie (Croissant)</option>
-            <option value="lastAirDate_desc">Dernière saison (Décroissant)</option>
-            <option value="lastAirDate_asc">Dernière saison (Croissant)</option>
-        </select>
-
-        <button type="submit">Afficher le catalogue filtré</button>
-    </form>
 {% endblock %}

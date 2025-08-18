@@ -12,11 +12,26 @@
         {% endblock %}
     </head>
     <body>
-        <h1><img src="{{ asset('images/logo.png') }}" alt="Logo Streamify"></h1>
-        <nav>
-            <li><a href=" {{ path('home') }}">Home</a></li>
-            <li><a href="/list">Catalogue</a></li>
-        </nav>
+        <header>
+            <a href="{{ path('home') }}">
+                <h1><img src="{{ asset('images/logo.png') }}" alt="Logo Streamify"></h1>
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="{{ path('home') }}">Home</a></li>
+                    <li><a href="{{ path('_list') }}">Catalogue</a></li>
+                    <li><a href="{{ path('_create') }}">Nouvelle série</a></li>
+                </ul>
+            </nav>
+            {% for type, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ type }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+
+        </header>
         {% block body %}{% endblock %}
     </body>
 </html>
