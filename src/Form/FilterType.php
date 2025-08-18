@@ -17,10 +17,23 @@ class FilterType extends AbstractType
                 'label' => 'Genre :',
                 'choices' => [
                     'Tous' => '',
-                    'Drama' => 'Drama',
-                    'Comedy' => 'Comedy',
-                    'Science-Fiction' => 'Science-Fiction',
+                    'Action' => 'Action',
+                    'Aventure' => 'Adventure',
+                    'Comédie' => 'Comedy',
+                    'Crime' => 'Crime',
+                    'Drame' => 'Drama',
+                    'Famille' => 'Family',
+                    'Fantaisie' => 'Fantasy',
+                    'Horreur' => 'Horror',
+                    'Mystère' => 'Mystery',
+                    'Politique' => 'Politics',
+                    'Romantique' => 'Romance',
+                    'Science-Fiction' => 'Sci-Fi',
+                    'Feuilleton' => 'Soap',
+                    'Guerre' => 'War',
+                    'Western' => 'Western',
                 ],
+                'required' => false,
             ])
             ->add('status', ChoiceType::class, [
                 'label' => 'Statut :',
@@ -30,6 +43,7 @@ class FilterType extends AbstractType
                     'Terminé' => 'Ended',
                     'Abandonné' => 'Canceled',
                 ],
+                'required' => false,
             ])
             ->add('sortBy', ChoiceType::class, [
                 'label' => 'Trier par :',
@@ -44,6 +58,7 @@ class FilterType extends AbstractType
                     'Dernière saison (Décroissant)' => 'lastAirDate_desc',
                     'Dernière saison (Croissant)' => 'lastAirDate_asc',
                 ],
+                'required' => false,
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'Filtrer',

@@ -68,6 +68,7 @@ form {
     background-color: #ffffff;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    color: #009688;
 }
 
 header {
@@ -101,7 +102,7 @@ header h1 img {
 
 /* Styles pour la navigation dans l'en-tête */
 header nav a {
-    color: #333333; /* Rendre le texte sombre pour la lisibilité sur un fond blanc */
+    color: #009688; /* Rendre le texte sombre pour la lisibilité sur un fond blanc */
     font-weight: bold;
     text-transform: uppercase; /* Optionnel : pour un look plus moderne */
     padding: 10px 15px;
@@ -120,10 +121,42 @@ header nav a:hover {
     align-items: flex-end; /* Alignez les boutons avec les sélecteurs */
 }
 
-.filter-container select {
-    width: auto; /* Permet aux sélecteurs d'avoir une taille basée sur le contenu */
+.filter-container select,
+.filter-container button {
+    height: 40px; /* Permet aux sélecteurs d'avoir une taille basée sur le contenu */
 }
 
 .filter-container button {
     margin-top: 0; /* Supprime la marge supérieure */
+}
+
+/* Amélioration de la section des contrôles de pagination */
+.pagination-controls {
+    display: flex;
+    justify-content: center; /* Centre les liens horizontalement */
+    align-items: center;
+    gap: 1.5em; /* Ajoute de l'espace entre les liens */
+    margin: 3em 0;
+}
+
+/* Amélioration du style des liens de pagination */
+.pagination-link {
+    display: inline-block;
+    padding: 12px 24px;
+    background-color: #009688; /* Votre couleur principale */
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: bold;
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Effet au survol des boutons */
+.pagination-link:hover {
+    background-color: #00796b;
+    transform: translateY(-3px) scale(1.05); /* Effet plus prononcé */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Serie;
 use App\Form\SerieType;
+use App\Form\FilterType;
 use App\Repository\SerieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,44 +21,72 @@ final class SerieController extends AbstractController
         $nbParPage = $parameters->get('serie')['nb_max'];
         $offset = ($page - 1) * $nbParPage;
 
-        $criterias = [];
-        $genre = $request->query->get('genre');
-        $status = $request->query->get('status');
+        $filterForm = $this->createForm(FilterType::class);
+        $filterForm->handleRequest($request);
 
+        $genre = $filterForm->get('genre')->getData();
+        $status = $filterForm->get('status')->getData();
+        $sortBy = $filterForm->get('sortBy')->getData();
+
+        // Créer un QueryBuilder pour construire la requête
+        $queryBuilder = $serieRepository->createQueryBuilder('s');
+
+        // Ajouter des conditions si les filtres sont sélectionnés
         if ($genre) {
-            $criterias['genres'] = $genre;
+            $queryBuilder->andWhere('s.genres LIKE :genre')
+                ->setParameter('genre', '%' . $genre . '%');
         }
 
         if ($status) {
-            $criterias['status'] = $status;
+            $queryBuilder->andWhere('s.status = :status')
+                ->setParameter('status', $status);
         }
 
-        $sortCriteria = [];
-        $sortBy = $request->query->get('sort-by');
+        // Ajouter la clause de tri
         if ($sortBy) {
             $parts = explode('_', $sortBy);
-            $sortCriteria[$parts[0]] = strtoupper($parts[1]);
+            $sortField = $parts[0];
+            $sortDirection = strtoupper($parts[1]);
+            $queryBuilder->orderBy('s.' . $sortField, $sortDirection);
         } else {
-            // Tri par défaut si rien n'est sélectionné
-            $sortCriteria['popularity'] = 'DESC';
+            $queryBuilder->orderBy('s.popularity', 'DESC');
         }
 
-        $series = $serieRepository->findBy(
-            $criterias,
-            $sortCriteria, // Utilisez le critère de tri dynamique
-            $nbParPage,
-            $offset
-        );
+        // Appliquer la pagination (limite et offset)
+        $queryBuilder->setFirstResult($offset)
+            ->setMaxResults($nbParPage);
 
-        $total = $serieRepository->count($criterias);
+        // Exécuter la requête
+        $series = $queryBuilder->getQuery()->getResult();
+
+        // Créer un autre QueryBuilder pour le comptage total
+        $countQueryBuilder = $serieRepository->createQueryBuilder('s');
+        if ($genre) {
+            $countQueryBuilder->andWhere('s.genres LIKE :genre')
+                ->setParameter('genre', '%' . $genre . '%');
+        }
+        if ($status) {
+            $countQueryBuilder->andWhere('s.status = :status')
+                ->setParameter('status', $status);
+        }
+
+        $total = $countQueryBuilder->select('count(s.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+
         $totalPages = ceil($total / $nbParPage);
 
         return $this->render('series/list.html.twig', [
             'series' => $series,
             'page' => $page,
             'total_pages' => $totalPages,
-            // Passez les critères actuels pour la pagination
-            'current_criterias' => array_merge($criterias, ['sort-by' => $sortBy]),
+            // Passer les critères de filtre actuels pour la pagination
+            'current_criterias' => array_filter([
+                'genre' => $genre,
+                'status' => $status,
+                'sortBy' => $sortBy
+            ]),
+            'filter_form' => $filterForm->createView(),
         ]);
     }
 
@@ -124,4 +153,3 @@ final class SerieController extends AbstractController
         ]);
     }
 }
-
