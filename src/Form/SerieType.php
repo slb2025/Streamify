@@ -19,7 +19,7 @@ class SerieType extends AbstractType
         $builder
             ->add('name', TextType::class, [
                 'label' => 'Nom de la série',
-                'required' => true,
+                'required' => false,
             ])
             ->add('overview', TextareaType::class, [
                 'label' => 'Synopsis',
@@ -32,20 +32,25 @@ class SerieType extends AbstractType
                     'Terminé' => 'ended',
                     'Abandonné' => 'Canceled',
                 ],
+                'required' => false,
                 'placeholder' => '-- Choisissez un statut --',
             ])
             ->add('vote', null, [
                 'label' => 'Nombre de votes',
+                'required' => false,
             ])
             ->add('popularity', null, [
                 'label' => 'Popularité',
+                'required' => false,
             ])
             ->add('genres', null, [
                 'label' => 'Genre',
+                'required' => false,
             ])
             ->add('firstAirDate', DateType::class, [
                 'label' => 'Date de première diffusion',
                 'widget' => 'single_text',
+                'required' => true,
             ])
             ->add('lastAirDate', DateType::class, [
                 'label' => 'Date de dernière diffusion',
@@ -54,15 +59,16 @@ class SerieType extends AbstractType
             ])
             ->add('backdrop', null, [
                 'label' => 'Nom du fichier de fond',
+                'required' => false,
             ])
             ->add('poster', null, [
                 'label' => 'Nom du fichier du poster',
+                'required' => false,
             ])
-            ->add('Valider', SubmitType::class)
+            ->add('Valider', SubmitType::class);
 //            ->add('tmdbId')
 //            ->add('dateCreated')
 //            ->add('dateModified')
-        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

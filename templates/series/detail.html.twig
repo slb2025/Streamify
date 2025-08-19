@@ -20,7 +20,11 @@
 
         <p>{{ serie.overview }}</p>
 
+        &nbsp;
         <a href="{{ path('_update', { id:serie.id }) }}" class="btn-primary">Editer</a>
+        <a href="{{ path('_delete', { id : serie.id, token : csrf_token('delete'~serie.id)}) }}"
+           class="btn btn-danger"
+           onclick="return confirm('Êtes-vous sûr ??')">Supprimer cette série</a>
     </div>
 
 {% endblock %}
