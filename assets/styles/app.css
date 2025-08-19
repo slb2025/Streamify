@@ -1,66 +1,85 @@
-body {
-    background-color: #FFFFFF; /* Fond blanc uni */
-    color: #f0f0f0; /* Couleur du texte plus sombre pour la lisibilité */
-    font-family: 'Roboto', sans-serif;
-    padding: 10px;
+/* Palette de couleurs et polices (si non définies ailleurs, sinon à retirer d'ici) */
+/* Remarque : Si vous avez déjà ces variables dans un autre fichier CSS, évitez la duplication. */
+:root {
+    --primary-color: #5d5d81; /* Indigo doux */
+    --accent-color: #a491d3;  /* Lavande claire */
+    --background-color: #f0f4f8; /* Gris très clair, doux */
+    --card-background: #ffffff;
+    --border-color: #e2e8f0;   /* Bordure subtile */
+    --text-color: #334155;     /* Gris foncé élégant */
+    --text-color-light: #ffffff;
+    --font-heading: 'Poppins', sans-serif;
+    --font-body: 'Roboto', sans-serif;
 }
 
-/* Le reste de votre CSS reste le même, mais assurez-vous
-   que les autres éléments s'affichent correctement
-   sur un fond clair. */
+body {
+    background-color: var(--background-color); /* Utilise la variable pour le fond */
+    color: var(--text-color); /* Utilise la variable pour le texte */
+    font-family: var(--font-body); /* Utilise la variable pour la police */
+    padding: 10px;
+    margin: 0; /* Assurez-vous que le body n'a pas de marge par défaut */
+}
+
+/* Styles pour la navigation générale (nav ul, nav li a) */
 nav ul {
     display: flex;
     flex-direction: row;
     list-style: none;
     gap: 2em;
+    padding: 0; /* Assurez-vous que la liste n'a pas de padding par défaut */
+    margin: 0; /* Assurez-vous que la liste n'a pas de marge par défaut */
 }
 
 nav li a {
     text-decoration: none;
-    color: inherit;
+    color: inherit; /* Hérite de la couleur définie pour le body ou l'en-tête */
 }
 
+/* Styles des tableaux */
 table {
     width: 100%;
-    border-collapse: collapse; /* Retire les espaces entre les bordures de cellules */
+    border-collapse: collapse;
     margin-top: 20px;
-    background-color: #f9f9f9; /* Un léger fond gris pour le tableau */
+    background-color: #f9f9f9;
     border: 1px solid #ddd;
-    border-radius: 8px; /* Bords arrondis pour un look plus moderne */
-    overflow: hidden; /* Assure que les bords arrondis s'appliquent bien */
+    border-radius: 8px;
+    overflow: hidden;
 }
 
 th, td {
-    padding: 12px 15px; /* Espacement intérieur */
-    text-align: left; /* Alignement du texte à gauche */
-    border-bottom: 1px solid #ddd; /* Ligne de séparation entre les rangées */
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
 }
 
 thead {
-    background-color: #eeeeee; /* Fond gris plus foncé pour l'en-tête */
+    background-color: #eeeeee;
     color: #333333;
 }
 
 tbody tr:hover {
-    background-color: #e2e2e2; /* Changement de couleur au survol des lignes */
+    background-color: #e2e2e2;
     cursor: pointer;
 }
 
+/* Styles des liens généraux */
 a {
-    color: #007bff; /* Couleur des liens */
-    text-decoration: none; /* Retire le soulignement des liens */
+    color: #007bff;
+    text-decoration: none;
 }
 
 a:hover {
-    text-decoration: underline; /* Ajoute un soulignement au survol */
+    text-decoration: underline;
 }
 
+/* Styles spécifiques aux listes de séries (si utilisées ailleurs que dans les recommandations) */
 .series-list {
     display: grid;
     grid-gap: 2em;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
 }
 
+/* Styles des formulaires */
 form {
     max-width: 600px;
     margin: 2em auto;
@@ -68,28 +87,33 @@ form {
     background-color: #ffffff;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    color: #009688;
+    color: var(--primary-color); /* Utilise la couleur primaire pour le texte du formulaire */
 }
 
+/* Styles de l'en-tête */
 header {
-    background-color: #FFFFFF;
+    background-color: var(--card-background); /* Utilise la variable pour le fond */
     width: 100%;
-    padding: 10px 20px;
+    padding: 15px 20px; /* MODIFIÉ : Augmentation du padding vertical pour élargir le bandeau */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 1000; /* Assure que l'en-tête est au-dessus de tout le contenu */
+    z-index: 1000;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-header h1 img {
-    height: 50px; /* Ajustez la taille de votre logo si nécessaire */
+header h1 {
+    margin: 0; /* Réinitialise la marge du h1 pour le logo */
 }
 
+header h1 img {
+    height: 50px;
+}
 
+/* Styles pour le fond des détails de série */
 .serie-detail-background {
     background-repeat: no-repeat;
     background-size: cover;
@@ -97,54 +121,54 @@ header h1 img {
     min-height: 100vh;
     color: #FFFFFF;
     text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
-    padding-top: 200px;
+    padding-top: 200px; /* Espace pour l'en-tête fixe */
 }
 
-/* Styles pour la navigation dans l'en-tête */
+/* Styles pour la navigation dans l'en-tête (liens) */
 header nav a {
-    color: #009688; /* Rendre le texte sombre pour la lisibilité sur un fond blanc */
+    color: var(--primary-color); /* Rendre le texte sombre pour la lisibilité sur un fond blanc */
     font-weight: bold;
-    text-transform: uppercase; /* Optionnel : pour un look plus moderne */
+    text-transform: uppercase;
     padding: 10px 15px;
     border-radius: 5px;
     transition: background-color 0.3s ease;
 }
 
 header nav a:hover {
-    background-color: #f0f0f0; /* Un léger fond gris au survol */
+    background-color: #f0f0f0;
 }
 
-/* Ajoutez ce style à votre app.css */
+/* Styles du conteneur de filtres */
 .filter-container {
     display: flex;
     gap: 1em;
-    align-items: flex-end; /* Alignez les boutons avec les sélecteurs */
+    align-items: flex-end;
+    margin-bottom: 2em; /* Ajout d'une marge en bas du filtre */
 }
 
 .filter-container select,
 .filter-container button {
-    height: 40px; /* Permet aux sélecteurs d'avoir une taille basée sur le contenu */
+    height: 40px;
 }
 
 .filter-container button {
-    margin-top: 0; /* Supprime la marge supérieure */
+    margin-top: 0;
 }
 
-/* Amélioration de la section des contrôles de pagination */
+/* Styles de pagination */
 .pagination-controls {
     display: flex;
-    justify-content: center; /* Centre les liens horizontalement */
+    justify-content: center;
     align-items: center;
-    gap: 1.5em; /* Ajoute de l'espace entre les liens */
+    gap: 1.5em;
     margin: 3em 0;
 }
 
-/* Amélioration du style des liens de pagination */
 .pagination-link {
     display: inline-block;
     padding: 12px 24px;
-    background-color: #009688; /* Votre couleur principale */
-    color: #ffffff;
+    background-color: var(--primary-color); /* Utilise la couleur principale */
+    color: var(--text-color-light);
     text-decoration: none;
     border-radius: 50px;
     font-weight: bold;
@@ -154,9 +178,72 @@ header nav a:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-/* Effet au survol des boutons */
 .pagination-link:hover {
-    background-color: #00796b;
-    transform: translateY(-3px) scale(1.05); /* Effet plus prononcé */
+    background-color: #00796b; /* Couleur au survol */
+    transform: translateY(-3px) scale(1.05);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Styles pour la grille des séries recommandées */
+.recommended-series-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 1rem;
+    margin-top: 2rem; /* Espace au-dessus de la section */
+}
+
+.serie-card {
+    border: 1px solid var(--border-color); /* Utilise la variable pour la bordure */
+    border-radius: 8px;
+    padding: 1rem;
+    width: 30%; /* Pour afficher 3 cartes par ligne sur de grands écrans */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    text-align: center;
+    background-color: var(--card-background); /* Utilise la variable pour le fond */
+}
+
+.serie-card img {
+    max-width: 100px;
+    height: auto;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+}
+
+.serie-card h4 {
+    margin-bottom: 0.5rem;
+    color: var(--primary-color); /* Utilise la variable pour le titre */
+}
+
+.serie-card p {
+    font-size: 0.85rem;
+    color: var(--text-color); /* Utilise la variable pour le texte */
+}
+
+.serie-card a {
+    display: inline-block;
+    background-color: #2e8b57; /* Couleur vert foncé */
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease;
+}
+
+.serie-card a:hover {
+    background-color: #226640; /* Couleur légèrement plus foncée au survol */
+}
+
+/* Ajustements responsifs pour les cartes de séries */
+@media (max-width: 768px) {
+    .serie-card {
+        width: 45%; /* 2 cartes par ligne sur tablette */
+    }
+}
+
+@media (max-width: 480px) {
+    .serie-card {
+        width: 90%; /* 1 carte par ligne sur mobile */
+    }
 }

@@ -2,9 +2,12 @@
 
 {% block title %} {{ parent() }} - Accueil {% endblock %}
 
+{% block stylesheets %}{% endblock %}
+
 {% block body %}
     <h2>Accueil</h2>
 
+    {# Formulaire de filtres existant #}
     {{ form_start(filter_form, {'action': path('_list'), 'method': 'get'}) }}
     <div class="filter-container">
         {{ form_row(filter_form.genre) }}
@@ -13,5 +16,27 @@
         {{ form_row(filter_form.submit) }}
     </div>
     {{ form_end(filter_form) }}
+
+    {# Nouvelle section pour les séries recommandées #}
+    <hr style="margin-top: 2rem; margin-bottom: 2rem; border-color: #e2e8f0;">
+    <h3>Nos séries recommandées</h3>
+    <div class="recommended-series-grid">
+        {% if recommended_series is not empty %}
+            {% for serie in recommended_series %}
+                <div class="serie-card">
+                    {% if serie.poster %}
+                        <img src="{{ asset('uploads/posters/series/' ~ serie.poster) }}" alt="Poster de {{ serie.name }}">
+                    {% else %}
+                        <img src="https://placehold.co/100x150/5d5d81/ffffff?text=No+Poster" alt="Pas de poster">
+                    {% endif %}
+                    <h4>{{ serie.name }}</h4>
+                    <p>Genre: {{ serie.genres }}</p>
+                    <a href="{{ path('_detail', {'id': serie.id}) }}">Voir les détails</a>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>Aucune série recommandée pour le moment. Ajoutez des séries avec une bonne popularité !</p>
+        {% endif %}
+    </div>
 
 {% endblock %}
