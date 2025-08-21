@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -17,6 +18,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 final class SeasonController extends AbstractController
 {
     #[Route('/season/create', name: 'season_create')]
+    #[IsGranted("ROLE_MODERATOR")]
     #[Route('/season/update/{id}', name: 'season_update', requirements: ['id' => '\d+'])]
     public function edit(
         ?Season $season, // Utiliser le paramètre d'autowiring pour la mise à jour

@@ -19,9 +19,20 @@
             <nav>
                 <ul>
                     <li><a href="{{ path('home') }}">Home</a></li>
-                    <li><a href="{{ path('_list') }}">Catalogue</a></li>
-                    <li><a href="{{ path('_create') }}">Nouvelle série</a></li>
-                    <li><a href="{{ path('season_create') }}">Nouvelle saison</a></li>
+                    {%  if is_granted('IS_AUTHENTICATED') %}
+                        <li><a href="{{ path('_list') }}">Catalogue</a></li>
+                    {% endif %}
+                    {%  if is_granted('ROLE_ADMIN') %}
+                        <li><a href="{{ path('_create') }}">Nouvelle série</a></li>
+                    {% endif %}
+                    {%  if is_granted('ROLE_MODERATOR') %}
+                        <li><a href="{{ path('season_create') }}">Nouvelle saison</a></li>
+                    {% endif %}
+                    {%  if is_granted('IS_AUTHENTICATED') %}
+                        <li><a href="{{ path('app_logout') }}">Se déconnecter</a></li>
+                    {% else %}
+                        <li><a href="{{ path('app_login') }}">Se connecter</a></li>
+                    {% endif %}
                 </ul>
             </nav>
             {% for type, messages in app.flashes %}

@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Filesystem\Filesystem; // Ajouté pour la gestion des fichiers
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface; // Ajouté pour la gestion des erreurs de fichier
@@ -23,6 +24,7 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException; // Ajouté po
 final class SerieController extends AbstractController
 {
     #[Route('/list/{page}', name: '_list', requirements: ['page' => '\d+'], defaults: ['page' => 1], methods: ['GET'])]
+    #[IsGranted('ROLE_USER')]
     public function list(SerieRepository $serieRepository, int $page, ParameterBagInterface $parameters, Request $request): Response
     {
         $nbParPage = $parameters->get('serie')['nb_max'];
@@ -53,6 +55,7 @@ final class SerieController extends AbstractController
 
 
     #[Route('/liste-custom', name: '_custom_list')]
+    #[IsGranted('ROLE_USER')]
     public function listCustom(SerieRepository $serieRepository): Response
     {
         // Exemple : 400 est la popularité minimale, 8 le nombre de séries
@@ -69,6 +72,7 @@ final class SerieController extends AbstractController
     }
 
     #[Route('/list/detail/{id}', name: '_detail', requirements: ['id' => '\d+'])]
+    #[IsGranted('ROLE_USER')]
     public function detail(Serie $serie): Response
     {
         return $this->render('series/detail.html.twig', [
@@ -77,6 +81,7 @@ final class SerieController extends AbstractController
     }
 
     #[Route('/list/create', name: '_create')]
+    #[IsGranted('ROLE_ADMIN')]
     public function create(Request $request, EntityManagerInterface $em, SluggerInterface $slugger, ParameterBagInterface $parameterBag): Response
     {
         $serie = new Serie();
@@ -127,6 +132,7 @@ final class SerieController extends AbstractController
     }
 
     #[Route('/list/update{id}', name: '_update', requirements: ['id' => '\d+'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function update(Serie $serie, Request $request, EntityManagerInterface $em, SluggerInterface $slugger, ParameterBagInterface $parameterBag, Filesystem $filesystem): Response // Ajout de Filesystem
     {
         $form = $this->createForm(SerieType::class, $serie);
@@ -199,6 +205,7 @@ final class SerieController extends AbstractController
     }
 
     #[Route('/list/delete{id}', name: '_delete', requirements: ['id' => '\d+'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function delete(Serie $serie, EntityManagerInterface $em, Request $request, ParameterBagInterface $parameterBag, Filesystem $filesystem): Response // Ajout de Filesystem
     {
         // Optionnel : Supprimer le fichier poster associé avant de supprimer l'entité

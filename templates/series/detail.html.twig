@@ -26,12 +26,13 @@
             {% endfor %}
         </ul>
 
-        <a href="{{ path('_update', { id:serie.id }) }}" class="btn btn-primary">Editer</a>
-        &nbsp;
-        <a href="{{ path('_delete', { id : serie.id, token : csrf_token('delete'~serie.id)}) }}"
-           class="btn btn-danger"
-           onclick="return confirm('Êtes-vous sûr ??')">Supprimer cette série</a>
-
+        {% if is_granted('ROLE_ADMIN') %}
+            <a href="{{ path('_update', { id:serie.id }) }}" class="btn btn-primary">Editer</a>
+            &nbsp;
+            <a href="{{ path('_delete', { id : serie.id, token : csrf_token('delete'~serie.id)}) }}"
+               class="btn btn-danger"
+               onclick="return confirm('Êtes-vous sûr ??')">Supprimer cette série</a>
+        {% endif %}
 
 {#        <form action="{{ path('_delete', { id : serie.id }) }}" method="post" style="display:inline-block">#}
 {#            <input type="hidden" name="_token" value="{{ csrf_token('delete'~serie.id) }}">#}
