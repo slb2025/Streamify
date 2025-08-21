@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\SerieRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -14,6 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\HasLifecycleCallbacks]
 #[ORM\UniqueConstraint(columns: ['name', 'first_air_date'])] // Décommenter si vous voulez la contrainte DB
 #[UniqueEntity(fields: ['name', 'firstAirDate'], message: 'Une série avec ce nom et cette date de première diffusion existe déjà.')]
+#[ApiResource]
 class Serie
 {
     #[ORM\Id]
