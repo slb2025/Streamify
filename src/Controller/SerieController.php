@@ -31,69 +31,26 @@ final class SerieController extends AbstractController
         $filterForm = $this->createForm(FilterType::class);
         $filterForm->handleRequest($request);
 
-        $genre = $filterForm->get('genre')->getData();
-        $status = $filterForm->get('status')->getData();
-        $sortBy = $filterForm->get('sortBy')->getData();
+        // Récupère les données du formulaire de filtre
+        $criterias = $filterForm->isSubmitted() ? $filterForm->getData() : [];
 
-        // Créer un QueryBuilder pour construire la requête
-        $queryBuilder = $serieRepository->createQueryBuilder('s');
+        // Utilise la nouvelle méthode du repository pour récupérer les séries paginées et filtrées
+        $paginator = $serieRepository->findPaginatedAndFiltered($nbParPage, $offset, $criterias);
 
-        // Ajouter des conditions si les filtres sont sélectionnés
-        if ($genre) {
-            $queryBuilder->andWhere('s.genres LIKE :genre')
-                ->setParameter('genre', '%' . $genre . '%');
-        }
-
-        if ($status) {
-            $queryBuilder->andWhere('s.status = :status')
-                ->setParameter('status', $status);
-        }
-
-        // Ajouter la clause de tri
-        if ($sortBy) {
-            $parts = explode('_', $sortBy);
-            $sortField = $parts[0];
-            $sortDirection = strtoupper($parts[1]);
-            // Gérer les champs de tri potentiellement différents dans l'entité
-            // Par exemple, 'firstAirDate' dans le formulaire correspond à 'first_air_date' dans l'entité
-            $dbSortField = match ($sortField) {
-                'vote' => 'vote',
-                'popularity' => 'popularity',
-                'firstAirDate' => 'first_air_date',
-                'lastAirDate' => 'last_air_date',
-                default => 'popularity', // Fallback
-            };
-            $queryBuilder->orderBy('s.' . $dbSortField, $sortDirection);
-        } else {
-            // Tri par défaut
-            $queryBuilder->orderBy('s.popularity', 'DESC');
-        }
-
-        // Appliquer la pagination (limite et offset)
-        $queryBuilder->setFirstResult($offset)
-            ->setMaxResults($nbParPage);
-
-        // Utiliser Doctrine Paginator pour récupérer les résultats et le total
-        $paginator = new Paginator($queryBuilder->getQuery());
-
-        $series = $paginator->getIterator()->getArrayCopy(); // Récupère les entités pour la page actuelle
-        $total = $paginator->count(); // Récupère le nombre total de résultats (optimisé par Paginator)
-
+        $series = iterator_to_array($paginator->getIterator());
+        $total = $paginator->count();
         $totalPages = ceil($total / $nbParPage);
-        $totalPages = $totalPages > 0 ? $totalPages : 1; // Assure au moins 1 page si aucun résultat
+        $totalPages = $totalPages > 0 ? $totalPages : 1;
 
         return $this->render('series/list.html.twig', [
             'series' => $series,
             'page' => $page,
             'total_pages' => $totalPages,
-            'current_criterias' => array_filter([ // Filtres actuels pour la pagination
-                'genre' => $genre,
-                'status' => $status,
-                'sortBy' => $sortBy
-            ]),
+            'current_criterias' => $criterias,
             'filter_form' => $filterForm->createView(),
         ]);
     }
+
 
     #[Route('/liste-custom', name: '_custom_list')]
     public function listCustom(SerieRepository $serieRepository): Response

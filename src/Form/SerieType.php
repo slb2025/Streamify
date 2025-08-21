@@ -82,7 +82,9 @@ class SerieType extends AbstractType
                 ]
 
             ])
-            ->add('Valider', SubmitType::class);
+            ->add('save', SubmitType::class, [
+                'label' => 'Enregistrer la série',
+        ]);
 //            ->add('tmdbId')
 //            ->add('dateCreated')
 //            ->add('dateModified')
